@@ -261,7 +261,12 @@ int oddParity(int x) {
  *   Rating: 5
  */
 int rotateRightBits(int x, int n) {
-  return ((x>>n)&~(((1<<31)>>n)<<1))|(x<<(32+~n+1));
+    int k = n & 31;
+    int left = (32 + (~k + 1)) & 31;
+    int mask = ~(((1 << 31) >> k) << 1);
+    int right = (x >> k) & mask;
+
+    return right | (x << left);
 }
 
 // P10
@@ -496,7 +501,7 @@ unsigned floatRoundEven(unsigned uf) {
         return sign | (127u << 23);
     }
 
-    int e = (int)exp - 127;
+    int e = exp - 127;
 
     if (e >= 23)
         return uf;
